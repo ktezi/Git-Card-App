@@ -1,4 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+live project url - https://ktezi.github.io/Git-Card-App/
 
 ## Available Scripts
 
