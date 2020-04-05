@@ -4,7 +4,7 @@ import axios from "axios";
 
 const CardList = (props) => (
   <div className="cardlist">
-    {props.profiles.map(profile => <Card key={profile.id} {...profile} />)}
+    {props.profiles.map(profile => <Card key={profile.id} {...profile} onDelete={props.onDelete} />)}
   </div>
 );
 
@@ -12,6 +12,7 @@ class Card extends React.Component {
 
   render() {
     const profile = this.props;
+    console.log(profile)
     let p;
     if (profile.blog) {
       p = <div className="linkdin"><a href={profile.blog} target="_blank"><i className="fa fa-linkedin" ></i></a></div>
@@ -29,6 +30,11 @@ class Card extends React.Component {
           {p}
           <div className="git-hub"><a href={profile.html_url} target="_blank"><i className="fa fa-github"></i></a></div>
         </div>
+        <div className='contact-remove-parent'>
+          <button className='contact-remove' onClick={() => this.props.onDelete(profile)}>
+          </button>
+        </div>
+
       </div>
     );
   }
@@ -39,10 +45,10 @@ class Form extends React.Component {
     userName: '',
     search_history: []
   };
+
   handleSubmit = async (event) => {
     var resp;
     event.preventDefault();
-
     let r = this.props.profiles.map(a => {
       if (a.login === this.state.userName) {
         return 'true';
@@ -118,6 +124,14 @@ class App extends React.Component {
     profiles: []
 
   };
+  removeProfile = (profile) => {
+    console.log(profile)
+    this.setState((currentState) => ({
+      profiles: currentState.profiles.filter((c) => {
+        return c.id !== profile.id;
+      })
+    }))
+  };
   addNewProfile = (profileData) => {
     this.setState(prevState => ({
       profiles: [...prevState.profiles, profileData],
@@ -129,7 +143,7 @@ class App extends React.Component {
         <div className="header">{this.props.title}
         </div>
         <Form onSubmit={this.addNewProfile} profiles={this.state.profiles} />
-        <CardList profiles={this.state.profiles} />
+        <CardList profiles={this.state.profiles} onDelete={this.removeProfile} />
       </div>
     );
   }
